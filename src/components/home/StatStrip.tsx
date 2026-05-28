@@ -13,17 +13,10 @@ export default function StatStrip() {
   return (
     <Section tone="bone" density="sm" className="border-y border-line">
       <div className="container-x">
-        <ul className="grid grid-cols-2 md:grid-cols-4">
+        <ul className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 md:gap-x-10">
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 0.08}>
-              <li
-                className={
-                  "flex flex-col gap-3 py-2 md:py-4 " +
-                  (i < 3 ? "md:border-r md:border-line" : "") +
-                  " " +
-                  (i % 2 === 0 ? "border-r md:border-r border-line" : "")
-                }
-              >
+              <li className="flex flex-col gap-3 py-2 md:py-4">
                 <span className="t-number text-[2.5rem] md:text-[3rem] leading-none text-ink">
                   <AnimatedCounter
                     to={s.value}

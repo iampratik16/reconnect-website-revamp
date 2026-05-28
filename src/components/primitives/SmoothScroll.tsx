@@ -24,8 +24,17 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     };
     raf = requestAnimationFrame(tick);
 
+    // Allow other components (e.g. mobile menu) to stop / resume scroll.
+    const onToggle = (e: Event) => {
+      const detail = (e as CustomEvent<{ stop?: boolean }>).detail;
+      if (detail?.stop) lenis.stop();
+      else lenis.start();
+    };
+    window.addEventListener("lenis-toggle", onToggle as EventListener);
+
     return () => {
       cancelAnimationFrame(raf);
+      window.removeEventListener("lenis-toggle", onToggle as EventListener);
       lenis.destroy();
     };
   }, []);

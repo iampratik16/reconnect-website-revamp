@@ -31,8 +31,15 @@ export default function Header() {
   }, []);
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    // Stop Lenis so smooth-scroll doesn't bypass the body overflow lock.
+    window.dispatchEvent(
+      new CustomEvent("lenis-toggle", { detail: { stop: open } }),
+    );
     return () => {
       document.body.style.overflow = "";
+      window.dispatchEvent(
+        new CustomEvent("lenis-toggle", { detail: { stop: false } }),
+      );
     };
   }, [open]);
 
@@ -158,11 +165,12 @@ export default function Header() {
             id="mobile-overlay"
             role="dialog"
             aria-modal="true"
-            initial={reduce ? { opacity: 0 } : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="md:hidden fixed inset-0 z-[60] bg-ink text-paper"
+            initial={reduce ? { opacity: 0 } : { y: "-100%" }}
+            animate={reduce ? { opacity: 1 } : { y: 0 }}
+            exit={reduce ? { opacity: 0 } : { y: "-100%" }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="md:hidden fixed inset-0 z-[60] text-paper overflow-hidden"
+            style={{ backgroundColor: "var(--color-ink)" }}
           >
             {/* Top bar inside overlay — explicit Close button */}
             <div className="container-x flex items-center justify-between h-[72px] border-b border-paper/10">
