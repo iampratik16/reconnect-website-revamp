@@ -10,15 +10,31 @@ export default function HeroHome() {
   const ref = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reduce = useReducedMotion();
-  const [isMobile, setIsMobile] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
 
+  // Some mobile browsers (iOS Safari especially) ignore the `autoplay` attribute
+  // on first paint and require an explicit .play() call once the element is
+  // muted + in the DOM.
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    setIsMobile(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
+    if (reduce) return;
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") {
+        p.catch(() => {
+          /* user gesture required — dark bg stays in place */
+        });
+      }
+    };
+    tryPlay();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") tryPlay();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [reduce]);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -27,8 +43,8 @@ export default function HeroHome() {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "18%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, reduce ? 1 : 0.35]);
 
-  const showVideo = !reduce && !isMobile;
-  const [videoReady, setVideoReady] = useState(false);
+  // Video runs on every screen size (only blocked by reduced-motion).
+  const showVideo = !reduce;
 
   return (
     <section
