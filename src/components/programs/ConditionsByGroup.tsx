@@ -15,7 +15,7 @@ export default function ConditionsByGroup() {
           lead="Every condition links to the program track most appropriate for that case. Severity and starting point come from your medical assessment."
         />
 
-        <div className="mt-14 grid md:grid-cols-4 gap-10">
+        <div className="mt-10 md:mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {Object.values(conditionGroups).map((g, gi) => {
             const items = conditions.filter((c) => c.group === g.group);
             return (

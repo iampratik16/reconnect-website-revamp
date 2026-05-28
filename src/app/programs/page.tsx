@@ -6,6 +6,7 @@ import ComparisonTable from "@/components/programs/ComparisonTable";
 import CgmAddOn from "@/components/programs/CgmAddOn";
 import CTASection from "@/components/primitives/CTASection";
 
+
 export const metadata = {
   title: "Programs",
   description:

@@ -15,14 +15,16 @@ export default function PricingTeaser() {
           lead="Three 6-month packages. All include a medical assessment, a personalised exercise plan, and progress tracking."
         />
 
-        <Stagger className="mt-14 grid md:grid-cols-3 gap-5">
+        <Stagger className="mt-12 md:mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {plans.map((p, i) => (
             <StaggerItem key={p.slug}>
               <Link
                 href="/pricing"
                 className={
-                  "relative card flex flex-col h-full p-7 md:p-8 " +
-                  (p.popular ? "bg-navy-deep text-bone border-navy-deep" : "")
+                  "group relative card flex flex-col h-full p-7 md:p-8 transition-colors duration-500 " +
+                  (p.popular
+                    ? "bg-navy-deep text-bone border-navy-deep"
+                    : "hover:bg-navy-deep hover:text-bone hover:border-navy-deep")
                 }
               >
                 {p.popular && (
@@ -31,24 +33,52 @@ export default function PricingTeaser() {
                   </span>
                 )}
                 <div className="flex items-baseline justify-between">
-                  <h3 className={p.popular ? "t-h3 text-bone" : "t-h3 text-ink"}>
+                  <h3
+                    className={
+                      "t-h3 " +
+                      (p.popular
+                        ? "text-bone"
+                        : "text-ink group-hover:text-bone")
+                    }
+                  >
                     {p.name}
                   </h3>
-                  <span className="section-num text-xs">0{i + 1}</span>
+                  <span
+                    className={
+                      "section-num text-xs " +
+                      (p.popular ? "" : "group-hover:text-clay-soft")
+                    }
+                  >
+                    0{i + 1}
+                  </span>
                 </div>
-                <p className={p.popular ? "t-body text-bone/70 mt-2" : "t-body mt-2"}>
+                <p
+                  className={
+                    "t-body mt-2 " +
+                    (p.popular ? "text-bone/70" : "group-hover:text-bone/70")
+                  }
+                >
                   {p.blurb}
                 </p>
                 <div className="mt-6 flex items-baseline gap-2">
                   <span
                     className={
                       "t-number text-[2.5rem] leading-none " +
-                      (p.popular ? "text-bone" : "text-ink")
+                      (p.popular
+                        ? "text-bone"
+                        : "text-ink group-hover:text-bone")
                     }
                   >
                     ₹{p.price.toLocaleString("en-IN")}
                   </span>
-                  <span className={p.popular ? "text-bone/60 text-sm" : "text-ink-soft text-sm"}>
+                  <span
+                    className={
+                      "text-sm " +
+                      (p.popular
+                        ? "text-bone/60"
+                        : "text-ink-soft group-hover:text-bone/60")
+                    }
+                  >
                     {p.period}
                   </span>
                 </div>
@@ -57,19 +87,22 @@ export default function PricingTeaser() {
                     <li
                       key={f.label}
                       className={
-                        "flex items-start gap-3 text-sm " +
+                        "flex items-start gap-3 text-sm transition-colors " +
                         (!f.included
-                          ? "opacity-40 line-through"
+                          ? "opacity-40 line-through " +
+                            (p.popular ? "text-bone" : "text-ink-soft group-hover:text-bone")
                           : p.popular
                             ? "text-bone/85"
-                            : "text-ink-soft")
+                            : "text-ink-soft group-hover:text-bone/85")
                       }
                     >
                       <span
                         aria-hidden
                         className={
-                          "mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 " +
-                          (p.popular ? "bg-clay-soft" : "bg-clay")
+                          "mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 transition-colors " +
+                          (p.popular
+                            ? "bg-clay-soft"
+                            : "bg-clay group-hover:bg-clay-soft")
                         }
                       />
                       {f.label}
@@ -78,7 +111,10 @@ export default function PricingTeaser() {
                 </ul>
                 <span
                   className={
-                    "mt-8 t-eyebrow " + (p.popular ? "text-clay-soft" : "text-clay")
+                    "mt-8 t-eyebrow inline-flex items-center gap-1.5 " +
+                    (p.popular
+                      ? "text-clay-soft"
+                      : "text-clay group-hover:text-clay-soft")
                   }
                 >
                   View details →

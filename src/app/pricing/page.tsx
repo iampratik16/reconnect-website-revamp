@@ -81,15 +81,15 @@ export default function Page() {
       {/* THREE TIERS */}
       <Section tone="bone" density="lg" className="border-t border-line">
         <div className="container-x">
-          <Stagger className="grid md:grid-cols-3 gap-5 md:gap-6">
+          <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {plans.map((p, i) => (
               <StaggerItem key={p.slug}>
                 <div
                   className={
-                    "relative card flex flex-col h-full p-7 md:p-9 " +
+                    "group relative card flex flex-col h-full p-7 md:p-9 transition-colors duration-500 " +
                     (p.popular
                       ? "bg-navy-deep text-bone border-navy-deep"
-                      : "")
+                      : "hover:bg-navy-deep hover:text-bone hover:border-navy-deep")
                   }
                 >
                   {p.popular && (
@@ -100,16 +100,29 @@ export default function Page() {
                   <div className="flex items-baseline justify-between">
                     <h2
                       className={
-                        p.popular ? "t-h2 text-bone" : "t-h2 text-ink"
+                        "t-h2 " +
+                        (p.popular
+                          ? "text-bone"
+                          : "text-ink group-hover:text-bone")
                       }
                     >
                       {p.name}
                     </h2>
-                    <span className="section-num text-xs">0{i + 1}</span>
+                    <span
+                      className={
+                        "section-num text-xs " +
+                        (p.popular ? "" : "group-hover:text-clay-soft")
+                      }
+                    >
+                      0{i + 1}
+                    </span>
                   </div>
                   <p
                     className={
-                      p.popular ? "t-body text-bone/70 mt-3" : "t-body mt-3"
+                      "t-body mt-3 " +
+                      (p.popular
+                        ? "text-bone/70"
+                        : "group-hover:text-bone/70")
                     }
                   >
                     {p.blurb}
@@ -118,14 +131,19 @@ export default function Page() {
                     <span
                       className={
                         "t-number text-[3rem] md:text-[3.5rem] leading-none " +
-                        (p.popular ? "text-bone" : "text-ink")
+                        (p.popular
+                          ? "text-bone"
+                          : "text-ink group-hover:text-bone")
                       }
                     >
                       ₹{p.price.toLocaleString("en-IN")}
                     </span>
                     <span
                       className={
-                        p.popular ? "text-bone/60 text-sm" : "text-ink-soft text-sm"
+                        "text-sm " +
+                        (p.popular
+                          ? "text-bone/60"
+                          : "text-ink-soft group-hover:text-bone/60")
                       }
                     >
                       {p.period}
@@ -140,14 +158,14 @@ export default function Page() {
                         <span
                           aria-hidden
                           className={
-                            "mt-1 w-5 h-5 shrink-0 rounded-full grid place-items-center " +
+                            "mt-1 w-5 h-5 shrink-0 rounded-full grid place-items-center transition-colors " +
                             (!f.included
                               ? p.popular
                                 ? "bg-bone/10 text-bone/30"
-                                : "bg-line text-ink-soft/40"
+                                : "bg-line text-ink-soft/40 group-hover:bg-bone/10 group-hover:text-bone/30"
                               : p.popular
                                 ? "bg-clay text-bone"
-                                : "bg-sage-tint text-sage-deep")
+                                : "bg-navy-tint text-navy group-hover:bg-clay group-hover:text-bone")
                           }
                         >
                           {f.included ? (
@@ -173,13 +191,14 @@ export default function Page() {
                         </span>
                         <span
                           className={
-                            !f.included
+                            "transition-colors " +
+                            (!f.included
                               ? p.popular
                                 ? "text-bone/40 line-through"
-                                : "text-ink-soft/50 line-through"
+                                : "text-ink-soft/50 line-through group-hover:text-bone/40"
                               : p.popular
                                 ? "text-bone/90"
-                                : "text-ink"
+                                : "text-ink group-hover:text-bone/90")
                           }
                         >
                           {f.label}

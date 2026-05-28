@@ -169,7 +169,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
             eyebrow="The four pillars, tuned to this track"
             title="One method. Adjusted for severity."
           />
-          <Stagger className="mt-12 grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <Stagger className="mt-10 md:mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {program.pillars.map((p, i) => (
               <StaggerItem key={p.title}>
                 <article className="card p-7 h-full">
@@ -192,7 +192,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
             title="Cautious, real outcomes — measured over months."
             lead="No cure claims. Reconnect supports your medical care; it doesn't replace it."
           />
-          <Stagger className="mt-12 grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <Stagger className="mt-10 md:mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {program.outcomes.map((o) => (
               <StaggerItem key={o.metric}>
                 <article className="card p-7 h-full flex flex-col gap-3">

@@ -7,6 +7,9 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { nav } from "@/lib/content/nav";
 import MagneticButton from "@/components/primitives/MagneticButton";
 
+/** Pages whose hero is dark/full-bleed media — the nav floats over it. */
+const DARK_HERO_ROUTES = new Set<string>(["/"]);
+
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -33,13 +36,19 @@ export default function Header() {
     };
   }, [open]);
 
+  const overDarkHero = DARK_HERO_ROUTES.has(pathname) && !scrolled;
+
+  const textCls = overDarkHero ? "text-paper" : "text-ink";
+  const textSoftCls = overDarkHero ? "text-paper/85" : "text-ink";
+  const hoverCls = overDarkHero ? "hover:text-paper/70" : "hover:text-navy";
+
   return (
     <header
       className={
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500 " +
         (scrolled
           ? "bg-paper/90 backdrop-blur-md border-b border-line"
-          : "bg-paper/0")
+          : "bg-transparent")
       }
     >
       <div className="container-x flex items-center justify-between h-[72px] md:h-[80px]">
@@ -50,15 +59,18 @@ export default function Header() {
         >
           <span
             className={
-              "font-[family-name:var(--font-display)] text-[1.5rem] md:text-[1.625rem] tracking-[-0.04em] font-bold " +
-              (open ? "text-paper" : "text-ink")
+              "font-[family-name:var(--font-display)] text-[1.5rem] md:text-[1.625rem] tracking-[-0.04em] font-bold transition-colors " +
+              (open ? "text-paper" : textCls)
             }
           >
             reconnect
           </span>
           <span
             aria-hidden
-            className={"text-navy text-lg font-bold " + (open ? "text-paper/70" : "")}
+            className={
+              "text-lg font-bold transition-colors " +
+              (open ? "text-paper/70" : overDarkHero ? "text-paper" : "text-navy")
+            }
           >
             .
           </span>
@@ -73,14 +85,21 @@ export default function Header() {
                 href={l.href}
                 className={
                   "relative px-4 py-2 text-[0.9375rem] transition-colors " +
-                  (active ? "text-navy font-medium" : "text-ink hover:text-navy")
+                  (active
+                    ? overDarkHero
+                      ? "text-paper font-medium"
+                      : "text-navy font-medium"
+                    : `${textSoftCls} ${hoverCls}`)
                 }
               >
                 {l.label}
                 {active && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute left-3 right-3 -bottom-0.5 h-px bg-navy"
+                    className={
+                      "absolute left-3 right-3 -bottom-0.5 h-px " +
+                      (overDarkHero ? "bg-paper" : "bg-navy")
+                    }
                   />
                 )}
               </Link>
@@ -89,7 +108,10 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <MagneticButton href="/assessment" variant="ink">
+          <MagneticButton
+            href="/assessment"
+            variant={overDarkHero ? "paper" : "ink"}
+          >
             Take the free assessment
           </MagneticButton>
         </div>
@@ -106,14 +128,26 @@ export default function Header() {
               "absolute block h-px w-6 bg-current transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] " +
               (open ? "rotate-45" : "-translate-y-1.5")
             }
-            style={{ color: open ? "var(--color-paper)" : "var(--color-ink)" }}
+            style={{
+              color: open
+                ? "var(--color-paper)"
+                : overDarkHero
+                  ? "var(--color-paper)"
+                  : "var(--color-ink)",
+            }}
           />
           <span
             className={
               "absolute block h-px w-6 bg-current transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] " +
               (open ? "-rotate-45" : "translate-y-1.5")
             }
-            style={{ color: open ? "var(--color-paper)" : "var(--color-ink)" }}
+            style={{
+              color: open
+                ? "var(--color-paper)"
+                : overDarkHero
+                  ? "var(--color-paper)"
+                  : "var(--color-ink)",
+            }}
           />
         </button>
       </div>

@@ -105,7 +105,7 @@ export default function PillarPage({ data }: { data: PillarData }) {
             eyebrow="What's included"
             title={<>The {data.eyebrow.toLowerCase()} pillar — <span className="italic-serif text-navy">in detail.</span></>}
           />
-          <Stagger className="mt-14 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <Stagger className="mt-10 md:mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {data.features.map((f, i) => (
               <StaggerItem key={f.title}>
                 <GradientBorder

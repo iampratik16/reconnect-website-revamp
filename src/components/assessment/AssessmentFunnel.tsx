@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import MagneticButton from "@/components/primitives/MagneticButton";
 import { LineArtSpine } from "@/components/primitives/LineArt";
@@ -95,21 +94,6 @@ export default function AssessmentFunnel() {
 
   return (
     <div className="min-h-[100svh] bg-bone flex flex-col">
-      {/* Slim top bar */}
-      <header className="border-b border-line bg-bone/85 backdrop-blur-md sticky top-0 z-10">
-        <div className="container-x flex items-center justify-between h-16 md:h-20">
-          <Link href="/" className="flex items-baseline gap-1">
-            <span className="font-[family-name:var(--font-display)] text-2xl text-ink">
-              reconnect
-            </span>
-            <span className="text-clay text-xl">.</span>
-          </Link>
-          <span className="t-caption text-ink-soft hidden sm:block">
-            2-minute medical assessment
-          </span>
-        </div>
-      </header>
-
       <div className="relative flex-1">
         <LineArtSpine
           aria-hidden

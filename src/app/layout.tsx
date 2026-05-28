@@ -62,6 +62,15 @@ export default function RootLayout({
       lang="en"
       className={`${geist.variable} ${instrumentSerif.variable}`}
     >
+      <head>
+        {/* Material Symbols — display=block so the ligature names never render as plain text */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,200..700,0..1,0..200&display=block"
+        />
+      </head>
       <body>
         <LayoutShell>{children}</LayoutShell>
       </body>

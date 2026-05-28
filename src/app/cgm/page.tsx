@@ -110,7 +110,7 @@ export default function Page() {
             eyebrow="How it works"
             title="Five steps. Two weeks of data. Six months of change."
           />
-          <ol className="mt-14 grid md:grid-cols-5 gap-6">
+          <ol className="mt-10 md:mt-14 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {steps.map((s) => (
               <Reveal key={s.t} delay={parseInt(s.t) * 0.05}>
                 <li className="flex flex-col gap-4 hairline-t pt-6">

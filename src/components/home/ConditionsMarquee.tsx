@@ -2,21 +2,15 @@ import Link from "next/link";
 import Section from "@/components/primitives/Section";
 import SectionHeader from "@/components/primitives/SectionHeader";
 import ScrollMarquee from "@/components/primitives/ScrollMarquee";
+import Icon from "@/components/primitives/Icon";
 import { conditions } from "@/lib/content/conditions";
-import {
-  LineArtKnee,
-  LineArtSpine,
-  LineArtHand,
-  LineArtHip,
-  LineArtSkeleton,
-} from "@/components/primitives/LineArt";
 
-const GROUP_ICON = {
-  joints: LineArtKnee,
-  spine: LineArtSpine,
-  bone: LineArtSkeleton,
-  rehab: LineArtHip,
-} as const;
+const GROUP_ICON: Record<string, string> = {
+  joints: "accessibility_new",
+  spine: "back_hand",
+  bone: "skeleton",
+  rehab: "healing",
+};
 
 function ConditionCard({
   name,
@@ -24,25 +18,27 @@ function ConditionCard({
   track,
   group,
 }: (typeof conditions)[number]) {
-  const Icon = GROUP_ICON[group] ?? LineArtHand;
+  const iconName = GROUP_ICON[group] ?? "favorite";
   return (
     <Link
       href={`/programs/${track}`}
-      className="gradient-border-static block shrink-0 w-[280px] md:w-[320px]"
+      className="gradient-border-static block shrink-0 w-[240px] sm:w-[280px] md:w-[320px]"
     >
       <div className="gradient-border-inner p-6 flex flex-col gap-4 h-full">
-        <Icon className="w-10 h-12 text-navy" aria-hidden />
+        <span className="grid place-items-center w-11 h-11 rounded-2xl bg-navy-tint text-navy">
+          <Icon name={iconName} size={22} weight={500} />
+        </span>
         <div>
           <h3 className="t-h3 text-ink">{name}</h3>
           <p className="t-caption mt-2 text-ink-soft">{blurb}</p>
         </div>
-        <span className="mt-auto t-eyebrow text-navy">
+        <span className="mt-auto t-eyebrow text-navy inline-flex items-center gap-1.5">
           {track === "prevent"
             ? "Prevent"
             : track === "manage"
               ? "Manage"
               : "Recover"}{" "}
-          →
+          <Icon name="arrow_outward" size={14} />
         </span>
       </div>
     </Link>

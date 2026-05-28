@@ -22,7 +22,7 @@ export default function ProgramsBand() {
           lead="Three tracks for where you are today. Each is personalised after your medical assessment."
         />
 
-        <Stagger className="mt-14 grid md:grid-cols-3 gap-5 md:gap-6">
+        <Stagger className="mt-12 md:mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {programs.map((p, i) => (
             <StaggerItem key={p.slug}>
               <GradientBorder

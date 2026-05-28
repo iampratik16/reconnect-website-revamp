@@ -2,21 +2,21 @@ import Section from "@/components/primitives/Section";
 import SectionHeader from "@/components/primitives/SectionHeader";
 import Reveal from "@/components/primitives/Reveal";
 import GradientBorder from "@/components/primitives/GradientBorder";
+import Icon from "@/components/primitives/Icon";
 import { science } from "@/lib/content/science";
-import { LineArtKnee, LineArtSpine, LineArtHand, LineArtHip } from "@/components/primitives/LineArt";
 
-const ICONS = {
-  knee: LineArtKnee,
-  skeleton: LineArtSpine,
-  hand: LineArtHand,
-  hip: LineArtHip,
+const ICON_NAME: Record<string, string> = {
+  knee: "healing",
+  skeleton: "skeleton",
+  hand: "fitness_center",
+  hip: "shield_person",
 };
 
 const SPANS = [
-  "md:col-span-4 md:row-span-2",
-  "md:col-span-2 md:row-span-1",
-  "md:col-span-2 md:row-span-1",
-  "md:col-span-3 md:row-span-1",
+  "lg:col-span-4 lg:row-span-2",
+  "lg:col-span-2 lg:row-span-1",
+  "lg:col-span-2 lg:row-span-1",
+  "lg:col-span-3 lg:row-span-1 sm:col-span-2",
 ];
 
 export default function Science() {
@@ -36,9 +36,9 @@ export default function Science() {
         />
 
         <Reveal>
-          <div className="mt-14 grid md:grid-cols-6 auto-rows-[minmax(180px,auto)] gap-4">
+          <div className="mt-10 md:mt-14 grid sm:grid-cols-2 lg:grid-cols-6 auto-rows-[minmax(180px,auto)] gap-4">
             {science.map((s, i) => {
-              const Icon = ICONS[s.icon];
+              const iconName = ICON_NAME[s.icon] ?? "favorite";
               const useAnimated = i === 0;
               return (
                 <GradientBorder
@@ -52,10 +52,9 @@ export default function Science() {
                       <span className="section-num text-sm">0{i + 1}</span>
                       <h3 className="t-h3 mt-3 text-ink">{s.title}</h3>
                     </div>
-                    <Icon
-                      className="w-12 h-16 opacity-70 shrink-0 text-navy"
-                      aria-hidden
-                    />
+                    <span className="grid place-items-center w-12 h-12 rounded-2xl bg-navy-tint text-navy shrink-0">
+                      <Icon name={iconName} size={26} weight={500} />
+                    </span>
                   </div>
                   <p className="t-body max-w-[40ch]">{s.copy}</p>
                 </GradientBorder>

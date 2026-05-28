@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/cn";
 
 type AnchorOrButton =
@@ -14,11 +15,8 @@ type AnchorOrButton =
     } & React.ButtonHTMLAttributes<HTMLButtonElement>);
 
 export type TimelineItem = {
-  /** Main small label shown near the dot */
   label?: string;
-  /** Secondary label shown under the rail */
   caption?: string;
-  /** Is this item emphasized (darker dot/rail before it) */
   active?: boolean;
 } & AnchorOrButton;
 
@@ -39,9 +37,24 @@ export type TimelineRailProps = {
   captionClassName?: string;
   renderLabel?: (item: TimelineItem, index: number) => React.ReactNode;
   renderCaption?: (item: TimelineItem, index: number) => React.ReactNode;
+  scrollProgress?: boolean;
+  scrollOffsetStart?: string;
+  scrollOffsetEnd?: string;
 };
 
-/** SRP: purely visual timeline rail. */
+/** Detect a stable matchMedia breakpoint. */
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia(query);
+    setMatches(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setMatches(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [query]);
+  return matches;
+}
+
 export default function TimelineRail({
   items,
   size = "md",
@@ -59,7 +72,23 @@ export default function TimelineRail({
   captionClassName,
   renderLabel,
   renderCaption,
+  scrollProgress = false,
+  scrollOffsetStart = "start 80%",
+  scrollOffsetEnd = "end 30%",
 }: TimelineRailProps) {
+  const ref = React.useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const isMobile = useMediaQuery("(max-width: 767px)");
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    offset: [scrollOffsetStart, scrollOffsetEnd] as any,
+  });
+
+  const trailWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const trailHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
   const lastActive = React.useMemo(() => {
     let idx = -1;
     items.forEach((it, i) => {
@@ -68,14 +97,130 @@ export default function TimelineRail({
     return idx;
   }, [items]);
 
-  const dotSize = size === "sm" ? 14 : size === "lg" ? 22 : 18;
-  const topOffset = size === "sm" ? -22 : -26;
-  const captionOffset = size === "sm" ? 18 : 22;
-  const defaultGap = size === "lg" ? "gap-x-16 md:gap-x-24" : "gap-x-12 md:gap-x-20";
+  const staticPct =
+    items.length > 1 && lastActive >= 0
+      ? `${(lastActive / (items.length - 1)) * 100}%`
+      : "0%";
 
+  const [activePassed, setActivePassed] = React.useState(0);
+  React.useEffect(() => {
+    if (!scrollProgress) return;
+    const unsub = scrollYProgress.on("change", (v) => {
+      const idx = Math.round(v * (items.length - 1));
+      setActivePassed(idx);
+    });
+    return () => unsub();
+  }, [scrollProgress, scrollYProgress, items.length]);
+
+  const dotSize = size === "sm" ? 14 : size === "lg" ? 28 : 18;
+  const topOffset = size === "sm" ? -22 : size === "lg" ? -42 : -26;
+  const captionOffset = size === "sm" ? 18 : size === "lg" ? 32 : 22;
+  const labelFontSize = size === "lg" ? 15 : 12;
+  const captionFontSize = size === "lg" ? 13 : 11;
+  const defaultGap = size === "lg" ? "gap-x-16 md:gap-x-28" : "gap-x-12 md:gap-x-20";
+
+  // === MOBILE: vertical timeline (rail on the left, content on the right) ===
+  if (isMobile) {
+    return (
+      <section
+        ref={ref}
+        aria-label="timeline"
+        className={cn("relative w-full", className)}
+      >
+        <ol className="relative pl-7 flex flex-col gap-9" role="list">
+          {/* Vertical rail */}
+          <div
+            aria-hidden
+            className="absolute left-[10px] top-2 bottom-2 w-[3px] bg-line rounded-full"
+          />
+          {emphasizeActiveTrail &&
+            (scrollProgress && !reduce ? (
+              <motion.div
+                aria-hidden
+                className="absolute left-[10px] top-2 w-[3px] bg-navy rounded-full origin-top"
+                style={{ height: trailHeight }}
+              />
+            ) : (
+              <div
+                aria-hidden
+                className="absolute left-[10px] top-2 w-[3px] bg-navy rounded-full"
+                style={{ height: scrollProgress && reduce ? "100%" : staticPct }}
+              />
+            ))}
+
+          {items.map((item, i) => {
+            const isActive = scrollProgress
+              ? reduce
+                ? true
+                : i <= activePassed
+              : !!item.active;
+            const dotCls = cn(
+              "absolute -left-[20px] top-1 w-5 h-5 rounded-full ring-4 ring-paper transition-colors duration-500",
+              isActive ? "bg-navy" : "bg-line-strong",
+            );
+            return (
+              <li key={i} className={cn("relative", itemClassName)}>
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    className="block hover:opacity-80 transition-opacity"
+                  >
+                    <span aria-hidden className={dotCls} />
+                    {item.caption && (
+                      <span
+                        className={cn(
+                          "block t-eyebrow text-[10px]",
+                          isActive ? "text-navy" : "text-ink-soft",
+                        )}
+                      >
+                        {item.caption}
+                      </span>
+                    )}
+                    {item.label && (
+                      <span className="block mt-1.5 text-[1.0625rem] font-semibold text-ink tracking-[-0.012em]">
+                        {item.label}
+                      </span>
+                    )}
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={item.onClick}
+                    className="block text-left w-full"
+                  >
+                    <span aria-hidden className={dotCls} />
+                    {item.caption && (
+                      <span
+                        className={cn(
+                          "block t-eyebrow text-[10px]",
+                          isActive ? "text-navy" : "text-ink-soft",
+                        )}
+                      >
+                        {item.caption}
+                      </span>
+                    )}
+                    {item.label && (
+                      <span className="block mt-1.5 text-[1.0625rem] font-semibold text-ink tracking-[-0.012em]">
+                        {item.label}
+                      </span>
+                    )}
+                  </button>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+    );
+  }
+
+  // === TABLET/DESKTOP: horizontal rail ===
   return (
-    <section aria-label="timeline" className={cn("relative w-full", className)}>
-      {/* Rail */}
+    <section
+      ref={ref}
+      aria-label="timeline"
+      className={cn("relative w-full", className)}
+    >
       <div
         aria-hidden
         className={cn("absolute left-0 right-0", railClassName)}
@@ -87,21 +232,22 @@ export default function TimelineRail({
       >
         <div className={cn("h-full rounded-full", lineColorClass)} />
 
-        {emphasizeActiveTrail && lastActive >= 0 && (
-          <div
-            className="absolute left-0 top-0 h-full rounded-full bg-navy"
-            style={{
-              width: `${
-                items.length > 1
-                  ? (lastActive / (items.length - 1)) * 100
-                  : 0
-              }%`,
-            }}
-          />
-        )}
+        {emphasizeActiveTrail &&
+          (scrollProgress && !reduce ? (
+            <motion.div
+              className="absolute left-0 top-0 h-full rounded-full bg-navy"
+              style={{ width: trailWidth }}
+            />
+          ) : (
+            <div
+              className="absolute left-0 top-0 h-full rounded-full bg-navy"
+              style={{
+                width: scrollProgress && reduce ? "100%" : staticPct,
+              }}
+            />
+          ))}
       </div>
 
-      {/* Dots row */}
       <ol
         className={cn(
           "relative flex items-center justify-between",
@@ -111,22 +257,35 @@ export default function TimelineRail({
         role="list"
       >
         {items.map((item, i) => {
-          const isActive = !!item.active;
+          const isActive = scrollProgress
+            ? reduce
+              ? true
+              : i <= activePassed
+            : !!item.active;
+          const commonDot = {
+            className: cn(
+              "relative rounded-full ring-2 ring-paper transition-all duration-500 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy",
+              isActive ? dotActiveClass : dotClass,
+            ),
+            style: { width: dotSize, height: dotSize },
+            "aria-current": isActive ? ("step" as const) : undefined,
+            "aria-label": item.label ?? item.caption ?? `Step ${i + 1}`,
+            title: item.label ?? item.caption,
+          };
+
           return (
             <li
               key={i}
-              className={cn(
-                "relative flex flex-col items-center",
-                itemClassName,
-              )}
+              className={cn("relative flex flex-col items-center", itemClassName)}
             >
               {item.label && (
                 <span
                   className={cn(
-                    "absolute -top-3 -translate-y-full select-none whitespace-nowrap text-[12px] font-medium text-ink",
+                    "absolute -top-3 -translate-y-full select-none whitespace-nowrap font-semibold text-ink tracking-[-0.01em]",
                     labelClassName,
                   )}
                   style={{
+                    fontSize: labelFontSize,
                     transform: `translateY(${topOffset}px) rotate(${-Math.abs(labelAngle)}deg)`,
                     transformOrigin: "bottom center",
                   }}
@@ -137,39 +296,22 @@ export default function TimelineRail({
               )}
 
               {item.href ? (
-                <a
-                  href={item.href}
-                  className={cn(
-                    "relative rounded-full ring-2 ring-paper transition-transform duration-300 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy",
-                    isActive ? dotActiveClass : dotClass,
-                  )}
-                  style={{ width: dotSize, height: dotSize }}
-                  aria-current={isActive ? "step" : undefined}
-                  aria-label={item.label ?? item.caption ?? `Step ${i + 1}`}
-                  title={item.label ?? item.caption}
-                />
+                <a href={item.href} {...commonDot} />
               ) : (
-                <button
-                  type="button"
-                  onClick={item.onClick}
-                  className={cn(
-                    "relative rounded-full ring-2 ring-paper transition-transform duration-300 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy",
-                    isActive ? dotActiveClass : dotClass,
-                  )}
-                  style={{ width: dotSize, height: dotSize }}
-                  aria-current={isActive ? "step" : undefined}
-                  aria-label={item.label ?? item.caption ?? `Step ${i + 1}`}
-                  title={item.label ?? item.caption}
-                />
+                <button type="button" onClick={item.onClick} {...commonDot} />
               )}
 
               {item.caption && (
                 <span
                   className={cn(
-                    "absolute select-none whitespace-nowrap text-[11px] uppercase tracking-[0.14em] text-ink-soft",
+                    "absolute select-none whitespace-nowrap uppercase tracking-[0.16em] font-medium",
+                    isActive ? "text-ink" : "text-ink-soft",
                     captionClassName,
                   )}
-                  style={{ transform: `translateY(${captionOffset}px)` }}
+                  style={{
+                    fontSize: captionFontSize,
+                    transform: `translateY(${captionOffset}px)`,
+                  }}
                   aria-hidden
                 >
                   {renderCaption ? renderCaption(item, i) : item.caption}
