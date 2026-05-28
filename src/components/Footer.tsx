@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import MagneticButton from "@/components/primitives/MagneticButton";
@@ -80,11 +81,17 @@ export default function Footer() {
       <div className="relative container-x py-16 grid md:grid-cols-12 gap-10 md:gap-8">
         {/* Brand + newsletter */}
         <div className="md:col-span-4">
-          <Link href="/" className="inline-flex items-baseline gap-1">
-            <span className="font-[family-name:var(--font-display)] text-3xl tracking-[-0.04em] font-bold">
+          <Link href="/" className="inline-flex flex-col items-center gap-1 leading-none">
+            <Image
+              src="/logo.png"
+              alt=""
+              width={56}
+              height={56}
+              className="h-12 w-auto"
+            />
+            <span className="font-[family-name:var(--font-display)] text-2xl tracking-[-0.04em] font-bold leading-none">
               reconnect
             </span>
-            <span className="text-navy text-xl font-bold">.</span>
           </Link>
           <p className="t-body mt-5 max-w-sm">
             Rheumatologist-led, personalised strength and nutrition for bones &

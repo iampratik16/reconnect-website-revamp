@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -58,28 +59,32 @@ export default function Header() {
           : "bg-transparent")
       }
     >
-      <div className="container-x flex items-center justify-between h-[72px] md:h-[80px]">
+      <div className="container-x flex items-center justify-between h-[72px] md:h-[88px]">
         <Link
           href="/"
           aria-label="Reconnect — home"
-          className="flex items-baseline gap-1"
+          className="flex flex-col items-center gap-0.5 leading-none"
         >
+          <Image
+            src="/logo.png"
+            alt=""
+            width={36}
+            height={36}
+            priority
+            className={
+              "h-7 md:h-8 w-auto transition-[filter] duration-300 " +
+              (overDarkHero
+                ? "[filter:brightness(0)_invert(1)]"
+                : "[filter:none]")
+            }
+          />
           <span
             className={
-              "font-[family-name:var(--font-display)] text-[1.5rem] md:text-[1.625rem] tracking-[-0.04em] font-bold transition-colors " +
+              "font-[family-name:var(--font-display)] text-[1.0625rem] md:text-[1.125rem] tracking-[-0.04em] font-bold transition-colors leading-none " +
               (open ? "text-paper" : textCls)
             }
           >
             reconnect
-          </span>
-          <span
-            aria-hidden
-            className={
-              "text-lg font-bold transition-colors " +
-              (open ? "text-paper/70" : overDarkHero ? "text-paper" : "text-navy")
-            }
-          >
-            .
           </span>
         </Link>
 
@@ -178,13 +183,17 @@ export default function Header() {
                 href="/"
                 onClick={() => setOpen(false)}
                 aria-label="Reconnect — home"
-                className="flex items-baseline gap-1"
+                className="flex flex-col items-center gap-0.5 leading-none"
               >
-                <span className="font-[family-name:var(--font-display)] text-[1.5rem] tracking-[-0.04em] font-bold text-paper">
+                <Image
+                  src="/logo.png"
+                  alt=""
+                  width={36}
+                  height={36}
+                  className="h-7 w-auto [filter:brightness(0)_invert(1)]"
+                />
+                <span className="font-[family-name:var(--font-display)] text-[1rem] tracking-[-0.04em] font-bold text-paper leading-none">
                   reconnect
-                </span>
-                <span aria-hidden className="text-lg font-bold text-paper/70">
-                  .
                 </span>
               </Link>
               <button
