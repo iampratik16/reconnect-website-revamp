@@ -16,7 +16,10 @@ export default function StatStrip() {
         <ul className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 md:gap-x-10">
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 0.08}>
-              <li className="flex flex-col gap-3 py-2 md:py-4">
+              <li
+                className="flex flex-col gap-3 py-2 md:py-4"
+                style={{ border: 0, borderLeft: 0, borderRight: 0 }}
+              >
                 <span className="t-number text-[2.5rem] md:text-[3rem] leading-none text-ink">
                   <AnimatedCounter
                     to={s.value}
