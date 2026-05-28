@@ -1,72 +1,68 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Geist, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import LayoutShell from "@/components/LayoutShell";
 
-const fraunces = Fraunces({
-  variable: "--font-display",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-body",
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
   subsets: ["latin"],
   display: "swap",
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://reconnect.health"),
   title: {
-    default: "Reconnect Wellness | Doctor-Led Strength Training for Joint Pain, Arthritis & Bone Health",
-    template: "%s | Reconnect Wellness",
+    default: "Reconnect — Doctor-led strength training for bones & joints",
+    template: "%s · Reconnect",
   },
   description:
-    "A personalized, rheumatologist-designed strength and nutrition program for joint pain, arthritis, back & disc issues, and osteoporosis. Doctor-led, not generic workouts.",
+    "A rheumatologist-designed strength and nutrition program for arthritis, joint pain, back issues, and osteoporosis. Personalised to your body.",
   keywords: [
-    "arthritis exercise program",
+    "rheumatologist-led strength training",
+    "arthritis exercise program India",
     "knee pain strength training",
-    "rheumatologist-led fitness India",
     "osteoporosis exercise",
-    "back pain exercise",
-    "disc bulge exercise",
-    "joint pain treatment without surgery",
-    "strength training for arthritis",
+    "back pain exercise program",
+    "joint pain without surgery",
+    "best ortho alternative treatment",
     "bone health program",
+    "doctor designed exercise",
   ],
   openGraph: {
-    title: "Reconnect Wellness | Stronger Joints. Denser Bones. A Life Without Pain.",
+    title:
+      "Reconnect — Stronger joints. Denser bones. A life without the pain.",
     description:
-      "A personalized, doctor-designed strength and nutrition program for joint pain, arthritis, and osteoporosis.",
+      "A doctor-designed strength and nutrition program for arthritis, joint pain, and osteoporosis.",
     type: "website",
     locale: "en_IN",
-    siteName: "Reconnect Wellness",
+    siteName: "Reconnect",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Reconnect Wellness | Doctor-Led Joint & Bone Health Programs",
+    title: "Reconnect — Doctor-led joint & bone health",
     description:
-      "Personalized strength training designed by a rheumatologist for joint pain, arthritis, and bone health.",
+      "Personalised strength training designed by a rheumatologist.",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable} scroll-smooth`}>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-screen flex flex-col bg-surface text-on-surface antialiased">
+    <html
+      lang="en"
+      className={`${geist.variable} ${instrumentSerif.variable}`}
+    >
+      <body>
         <LayoutShell>{children}</LayoutShell>
       </body>
     </html>

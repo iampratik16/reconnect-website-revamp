@@ -1,255 +1,516 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* === Colors === */
-  --color-surface: #fbf9f4;
-  --color-surface-dim: #dbdad5;
-  --color-surface-bright: #fbf9f4;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f5f3ee;
-  --color-surface-container: #f0eee9;
-  --color-surface-container-high: #eae8e3;
-  --color-surface-container-highest: #e4e2dd;
-  --color-on-surface: #1b1c19;
-  --color-on-surface-variant: #3e4947;
-  --color-surface-variant: #e4e2dd;
+  /* === Reconnect v2 — Clinical Editorial (white + navy + monochrome) === */
+  /* Baseline whites */
+  --color-paper: #FFFFFF;
+  --color-paper-soft: #F5F4F1;
+  --color-paper-warm: #EFEEEA;
 
-  --color-primary: #00544c;
-  --color-on-primary: #ffffff;
-  --color-primary-container: #0e6e64;
-  --color-on-primary-container: #9cede0;
-  --color-primary-fixed: #a0f1e4;
-  --color-primary-fixed-dim: #84d5c8;
+  /* Backwards-compat aliases (kept so existing class names keep working) */
+  --color-bone: #FFFFFF;
+  --color-bone-deep: #F5F4F1;
+  --color-calcium: #FFFFFF;
 
-  --color-secondary: #346760;
-  --color-on-secondary: #ffffff;
-  --color-secondary-container: #b5eae1;
-  --color-on-secondary-container: #386b64;
-  --color-secondary-fixed: #b8ede4;
+  /* Ink */
+  --color-ink: #0A0A0A;
+  --color-ink-soft: #5F5F60;
+  --color-ink-mute: #9A9A9C;
 
-  --color-tertiary: #6e3f00;
-  --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #8f5400;
-  --color-on-tertiary-container: #ffd7b2;
-  --color-tertiary-fixed: #ffdcbd;
-  --color-tertiary-fixed-dim: #ffb86e;
+  /* Navy brand */
+  --color-navy: #00295C;
+  --color-navy-deep: #00193C;
+  --color-navy-tint: #EEF4FC;
 
-  --color-error: #ba1a1a;
-  --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
+  /* Bright accent (rare, for highlights) */
+  --color-blue: #0171E3;
 
-  --color-outline: #6e7977;
-  --color-outline-variant: #bec9c6;
-  --color-inverse-surface: #30312e;
-  --color-inverse-on-surface: #f2f1ec;
-  --color-inverse-primary: #84d5c8;
-  --color-surface-tint: #046a60;
-  --color-background: #fbf9f4;
-  --color-on-background: #1b1c19;
+  /* Warm CTA accent (kept, but used sparingly) */
+  --color-clay: #C75B39;
+  --color-clay-soft: #F1D8CC;
 
-  /* Accent */
-  --color-accent-amber: #F0A24B;
-  --color-success: #5B8C5A;
-  --color-hairline: #E6E1D6;
+  /* Aliased: "sage*" now points to navy so existing styling auto-updates */
+  --color-sage: #00295C;
+  --color-sage-deep: #00193C;
+  --color-sage-tint: #EEF4FC;
+
+  /* Hairlines */
+  --color-line: #E5E5E2;
+  --color-line-strong: #D2D2CE;
 
   /* === Typography === */
-  --font-display: "Fraunces", serif;
-  --font-body: "Inter", sans-serif;
+  --font-display: var(--font-geist), "Söhne", "GT America", "Inter", system-ui, sans-serif;
+  --font-body: var(--font-geist), "Söhne", "GT America", system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), "PP Editorial New", Georgia, serif;
 
-  /* === Border Radius === */
-  --radius-card: 12px;
-  --radius-button: 12px;
-  --radius-section: 24px;
-
-  /* === Spacing === */
-  --spacing-unit: 8px;
-  --spacing-stack-sm: 12px;
-  --spacing-stack-md: 24px;
-  --spacing-stack-lg: 48px;
+  /* === Container === */
+  --spacing-container: 1280px;
   --spacing-gutter: 24px;
-  --spacing-margin-mobile: 20px;
-  --spacing-margin-desktop: 64px;
-  --spacing-container-max: 1200px;
+
+  /* === Motion === */
+  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-/* === Base Styles === */
+/* === Base canvas === */
+:root {
+  color-scheme: light;
+}
+
 html {
-  scroll-behavior: smooth;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background-color: var(--color-surface);
-  color: var(--color-on-surface);
   font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  color: var(--color-ink);
+  background-color: var(--color-paper);
+  overflow-x: hidden;
 }
 
-/* === Utility Classes === */
-.soft-shadow {
-  box-shadow: 0px 4px 20px rgba(8, 67, 61, 0.04);
+::selection {
+  background: var(--color-navy);
+  color: var(--color-paper);
 }
 
-.soft-shadow-hover:hover {
-  box-shadow: 0px 12px 30px rgba(8, 67, 61, 0.08);
-}
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
 
-.hairline-border {
-  border: 1px solid var(--color-hairline);
-}
-
-.btn-primary {
-  background-color: var(--color-primary-container);
-  color: var(--color-on-primary);
-  border-bottom: 2px solid var(--color-primary);
-  border-radius: var(--radius-button);
-  padding: 12px 24px;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0.01em;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-.btn-primary:active {
-  transform: translateY(1px);
-}
-
-.btn-amber {
-  background-color: var(--color-accent-amber);
-  color: var(--color-on-surface);
-  border-bottom: 2px solid #d98b36;
-  border-radius: var(--radius-button);
-  padding: 12px 24px;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.btn-amber:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-.btn-secondary {
-  background-color: transparent;
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
-  border-radius: var(--radius-button);
-  padding: 12px 24px;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0.01em;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.btn-secondary:hover {
-  background-color: rgba(14, 110, 100, 0.05);
-}
-
-/* Glass card */
-.glass-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--color-hairline);
-  box-shadow: 0px 4px 20px rgba(8, 67, 61, 0.04);
-}
-
-/* Progress bar */
-.progress-bar {
-  background-color: var(--color-tertiary-fixed-dim);
-  height: 8px;
-  border-radius: 9999px;
-  transition: width 0.3s ease;
-}
-
-/* Typography classes */
-.text-display-lg {
+/* === Editorial type scale — heavy modern grotesk like MyHealthPrac === */
+.t-hero {
   font-family: var(--font-display);
-  font-size: 48px;
-  line-height: 56px;
-  letter-spacing: -0.02em;
   font-weight: 700;
+  font-size: clamp(2.75rem, 8vw, 7rem);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
 }
-.text-display-lg-mobile {
+.t-h1 {
   font-family: var(--font-display);
-  font-size: 32px;
-  line-height: 40px;
   font-weight: 700;
-}
-.text-headline-md {
-  font-family: var(--font-display);
-  font-size: 32px;
-  line-height: 40px;
-  font-weight: 600;
-}
-.text-headline-md-mobile {
-  font-family: var(--font-display);
-  font-size: 24px;
-  line-height: 32px;
-  font-weight: 600;
-}
-.text-title-lg {
-  font-family: var(--font-body);
-  font-size: 20px;
-  line-height: 28px;
-  font-weight: 600;
-}
-.text-body-lg {
-  font-family: var(--font-body);
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 400;
-}
-.text-body-md {
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-}
-.text-label-md {
-  font-family: var(--font-body);
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0.01em;
-  font-weight: 500;
-}
-.text-caption {
-  font-family: var(--font-body);
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 400;
-}
-
-/* Material Symbols */
-.material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
+  font-size: clamp(2.25rem, 5.5vw, 4.5rem);
   line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.035em;
 }
+.t-h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.875rem, 3.8vw, 3.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+}
+.t-h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.375rem, 2.2vw, 1.875rem);
+  line-height: 1.15;
+  letter-spacing: -0.018em;
+}
+.t-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.t-lead {
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+  line-height: 1.5;
+  letter-spacing: -0.008em;
+  color: var(--color-ink-soft);
+  font-weight: 400;
+}
+.t-body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--color-ink-soft);
+  font-weight: 400;
+}
+.t-caption {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--color-ink-soft);
+}
+.t-number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.italic-serif {
+  font-style: italic;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* === Containers & sections === */
+.container-x {
+  width: 100%;
+  max-width: calc(var(--spacing-container) + var(--spacing-gutter) * 2);
+  margin-inline: auto;
+  padding-inline: clamp(20px, 4vw, 56px);
+}
+.section-y {
+  padding-block: clamp(80px, 11vw, 160px);
+}
+.section-y-sm {
+  padding-block: clamp(56px, 7vw, 100px);
+}
+
+/* === Hairlines === */
+.hairline { border-color: var(--color-line); }
+.hairline-t { border-top: 1px solid var(--color-line); }
+.hairline-b { border-bottom: 1px solid var(--color-line); }
+.hairline-y { border-block: 1px solid var(--color-line); }
+
+/* === Dotted-grid background (MyHealthPrac vibe) === */
+.dot-grid {
+  background-image: radial-gradient(var(--color-line-strong) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+}
+.dotted-divider {
+  background-image: radial-gradient(var(--color-line-strong) 1px, transparent 1px);
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+  background-position: center;
+  height: 1px;
+}
+
+/* === Paper grain — very subtle now (was the old film grain) === */
+.paper-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.025;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* === Mask reveal === */
+.mask-reveal {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: 1;
+}
+.mask-reveal > span {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* === BUTTONS — MyHealthPrac style: pill with arrow-in-dark-circle === */
+.btn-base {
+  --btn-arrow-size: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: -0.005em;
+  border-radius: 9999px;
+  padding: 6px 6px 6px 22px;
+  transition: background-color 240ms var(--ease-soft), color 240ms var(--ease-soft), border-color 240ms var(--ease-soft), box-shadow 280ms var(--ease-soft), transform 280ms var(--ease-soft);
+  position: relative;
+  isolation: isolate;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.btn-base:focus-visible {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 3px;
+}
+.btn-base .btn-arrow {
+  display: grid;
+  place-items: center;
+  width: var(--btn-arrow-size);
+  height: var(--btn-arrow-size);
+  border-radius: 9999px;
+  transition: transform 320ms var(--ease-out-expo), background-color 240ms var(--ease-soft);
+}
+.btn-base .btn-arrow svg { transition: transform 320ms var(--ease-out-expo); }
+.btn-base:hover .btn-arrow svg { transform: translate(2px, -2px); }
+.btn-base:active { transform: scale(0.98); }
+
+/* Variants */
+.btn-clay {
+  background-color: var(--color-clay);
+  color: var(--color-paper);
+  box-shadow: 0 8px 24px -10px color-mix(in oklab, var(--color-clay) 60%, transparent);
+}
+.btn-clay .btn-arrow { background-color: color-mix(in oklab, black 22%, var(--color-clay)); color: var(--color-paper); }
+.btn-clay:hover { background-color: color-mix(in oklab, var(--color-clay) 90%, black); }
+
+.btn-ink {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  box-shadow: 0 8px 24px -10px color-mix(in oklab, var(--color-ink) 60%, transparent);
+}
+.btn-ink .btn-arrow { background-color: var(--color-paper); color: var(--color-ink); }
+.btn-ink:hover { background-color: color-mix(in oklab, var(--color-ink) 90%, var(--color-navy)); }
+
+.btn-navy {
+  background-color: var(--color-navy);
+  color: var(--color-paper);
+  box-shadow: 0 8px 24px -10px color-mix(in oklab, var(--color-navy) 50%, transparent);
+}
+.btn-navy .btn-arrow { background-color: var(--color-paper); color: var(--color-navy); }
+.btn-navy:hover { background-color: var(--color-navy-deep); }
+
+.btn-paper {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  border-color: var(--color-line);
+}
+.btn-paper .btn-arrow { background-color: var(--color-ink); color: var(--color-paper); }
+.btn-paper:hover { border-color: var(--color-ink); }
+
+.btn-sage,
+.btn-bone-outline {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  border-color: var(--color-line);
+}
+.btn-sage .btn-arrow,
+.btn-bone-outline .btn-arrow { background-color: var(--color-ink); color: var(--color-paper); }
+.btn-sage:hover,
+.btn-bone-outline:hover { border-color: var(--color-ink); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-ink);
+  padding-right: 22px;
+}
+.btn-ghost .btn-arrow { background-color: var(--color-ink); color: var(--color-paper); }
+.btn-ghost:hover { color: var(--color-navy); }
+
+/* === Pill === */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  border-radius: 9999px;
+  background-color: var(--color-paper-soft);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+}
+
+/* === Card — structural only, no bg so utilities can override === */
+.card {
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  transition: transform 520ms var(--ease-soft), box-shadow 520ms var(--ease-soft), border-color 280ms var(--ease-soft);
+}
+.card:not([class*="bg-"]) {
+  background-color: var(--color-paper);
+}
+.card:hover {
+  border-color: var(--color-line-strong);
+  box-shadow: 0 24px 48px -28px color-mix(in oklab, var(--color-navy) 25%, transparent);
+}
+
+/* === Gradient border (aihero-style) — animated rainbow edge ===
+   Use: <div class="gradient-border"><div class="gradient-border-inner">...</div></div> */
+@property --grad-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.gradient-border {
+  --grad-angle: 0deg;
+  --grad-pad: 2px;
+  position: relative;
+  border-radius: 22px;
+  padding: var(--grad-pad);
+  background:
+    conic-gradient(
+      from var(--grad-angle),
+      #F0A24B 0%,
+      #C75B39 12%,
+      #E07AAD 30%,
+      #8067F2 48%,
+      #0171E3 64%,
+      #2BB673 82%,
+      #F0A24B 100%
+    );
+  isolation: isolate;
+  animation: grad-rotate 12s linear infinite;
+  transition: padding 320ms var(--ease-out-expo), transform 480ms var(--ease-soft);
+}
+.gradient-border:hover {
+  --grad-pad: 3px;
+  transform: translateY(-2px);
+}
+.gradient-border::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 26px;
+  background: inherit;
+  filter: blur(14px);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 520ms var(--ease-soft);
+  pointer-events: none;
+}
+.gradient-border:hover::after {
+  opacity: 0.25;
+}
+@keyframes grad-rotate {
+  to { --grad-angle: 360deg; }
+}
+.gradient-border-inner {
+  background: var(--color-paper);
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+}
+.gradient-border:hover {
+  animation-duration: 5s;
+}
+
+/* Static (non-animated) sibling — broader on hover with rotating gradient ignition.
+   Used across grids of many cards (perf-friendly when idle). */
+.gradient-border-static {
+  --grad-angle: 215deg;
+  --grad-pad: 1.5px;
+  position: relative;
+  border-radius: 22px;
+  padding: var(--grad-pad);
+  background: conic-gradient(
+    from var(--grad-angle),
+    #F0A24B,
+    #C75B39 14%,
+    #E07AAD 28%,
+    #8067F2 44%,
+    #0171E3 60%,
+    #2BB673 78%,
+    #F0A24B
+  );
+  transition: padding 320ms var(--ease-out-expo), filter 320ms var(--ease-soft), transform 480ms var(--ease-soft);
+}
+.gradient-border-static:hover {
+  --grad-pad: 2.5px;
+  filter: brightness(1.08) saturate(1.1);
+  transform: translateY(-2px);
+  animation: grad-rotate 8s linear infinite;
+}
+.gradient-border-static::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 25px;
+  background: inherit;
+  filter: blur(10px);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 480ms var(--ease-soft);
+  pointer-events: none;
+}
+.gradient-border-static:hover::after {
+  opacity: 0.18;
+}
+.gradient-border-static > .gradient-border-inner {
+  background: var(--color-paper);
+  border-radius: 20px;
+}
+
+/* === Marquee === */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-x-rev {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.marquee-track { animation: marquee-x var(--marquee-duration, 40s) linear infinite; }
+.marquee-track-rev { animation: marquee-x-rev var(--marquee-duration, 40s) linear infinite; }
+.marquee:hover .marquee-track,
+.marquee:hover .marquee-track-rev { animation-play-state: paused; }
+
+/* === Hover underline grow (links / emphasis) === */
+.link-grow {
+  position: relative;
+  display: inline-block;
+}
+.link-grow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: currentColor;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 480ms var(--ease-out-expo);
+}
+.link-grow:hover::after { transform: scaleX(1); }
+
+/* === Section eyebrow number === */
+.section-num {
+  font-family: var(--font-display);
+  font-feature-settings: "tnum" on, "lnum" on;
+  font-weight: 500;
+  color: var(--color-navy);
+}
+
+/* === Watermark big number === */
+.watermark-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(10rem, 22vw, 22rem);
+  line-height: 0.85;
+  color: color-mix(in oklab, var(--color-navy) 6%, transparent);
+  letter-spacing: -0.05em;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* === Focus ring (a11y) === */
+:focus-visible {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* === Reduced motion === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track,
+  .marquee-track-rev,
+  .gradient-border { animation: none !important; transform: none !important; }
+}
+
+a, button { -webkit-tap-highlight-color: transparent; }

@@ -1,85 +1,166 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-
-const navLinks = [
-  { href: "/programs", label: "Programs" },
-  { href: "/how-it-works", label: "How It Works" },
-  { href: "/about", label: "About Dr. Shruthi" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/faq", label: "FAQ" },
-];
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { nav } from "@/lib/content/nav";
+import MagneticButton from "@/components/primitives/MagneticButton";
 
 export default function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
-    <header className="bg-surface/90 backdrop-blur-md border-b border-surface-variant/30 sticky top-0 z-50 shadow-sm transition-all duration-300">
-      <div className="flex justify-between items-center w-full px-5 md:px-16 h-20 max-w-[1200px] mx-auto">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <span className="font-[var(--font-display)] text-2xl md:text-3xl font-bold text-primary tracking-tight">
-            Reconnect
+    <header
+      className={
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500 " +
+        (scrolled
+          ? "bg-paper/90 backdrop-blur-md border-b border-line"
+          : "bg-paper/0")
+      }
+    >
+      <div className="container-x flex items-center justify-between h-[72px] md:h-[80px]">
+        <Link
+          href="/"
+          aria-label="Reconnect — home"
+          className="flex items-baseline gap-1"
+        >
+          <span
+            className={
+              "font-[family-name:var(--font-display)] text-[1.5rem] md:text-[1.625rem] tracking-[-0.04em] font-bold " +
+              (open ? "text-paper" : "text-ink")
+            }
+          >
+            reconnect
+          </span>
+          <span
+            aria-hidden
+            className={"text-navy text-lg font-bold " + (open ? "text-paper/70" : "")}
+          >
+            .
           </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-8 items-center">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-label-md text-on-surface-variant font-medium hover:text-primary transition-colors duration-200"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav className="hidden md:flex items-center gap-1">
+          {nav.map((l) => {
+            const active = pathname === l.href || pathname.startsWith(l.href + "/");
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={
+                  "relative px-4 py-2 text-[0.9375rem] transition-colors " +
+                  (active ? "text-navy font-medium" : "text-ink hover:text-navy")
+                }
+              >
+                {l.label}
+                {active && (
+                  <motion.span
+                    layoutId="nav-underline"
+                    className="absolute left-3 right-3 -bottom-0.5 h-px bg-navy"
+                  />
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* CTA */}
-        <div className="hidden md:flex items-center gap-4">
-          <Link href="/assessment" className="btn-amber">
+        <div className="hidden md:block">
+          <MagneticButton href="/assessment" variant="ink">
             Take the free assessment
-          </Link>
+          </MagneticButton>
         </div>
 
-        {/* Mobile Toggle */}
         <button
-          aria-label="Toggle Menu"
-          className="md:hidden text-on-surface p-2"
-          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="mobile-overlay"
+          className="md:hidden relative w-10 h-10 grid place-items-center"
+          onClick={() => setOpen((s) => !s)}
         >
-          <span className="material-symbols-outlined">
-            {mobileOpen ? "close" : "menu"}
-          </span>
+          <span
+            className={
+              "absolute block h-px w-6 bg-current transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] " +
+              (open ? "rotate-45" : "-translate-y-1.5")
+            }
+            style={{ color: open ? "var(--color-paper)" : "var(--color-ink)" }}
+          />
+          <span
+            className={
+              "absolute block h-px w-6 bg-current transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] " +
+              (open ? "-rotate-45" : "translate-y-1.5")
+            }
+            style={{ color: open ? "var(--color-paper)" : "var(--color-ink)" }}
+          />
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="md:hidden bg-surface border-t border-surface-variant/30 px-5 pb-6">
-          <nav className="flex flex-col gap-4 pt-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-body-md text-on-surface-variant hover:text-primary transition-colors py-2"
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <Link
-              href="/assessment"
-              className="btn-amber text-center mt-2"
-              onClick={() => setMobileOpen(false)}
-            >
-              Take the free assessment
-            </Link>
-          </nav>
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-overlay"
+            role="dialog"
+            aria-modal="true"
+            initial={reduce ? { opacity: 0 } : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="md:hidden fixed inset-0 z-40 bg-ink text-paper"
+          >
+            <div className="container-x pt-28 pb-12 h-full flex flex-col">
+              <ul className="flex-1 flex flex-col gap-1 mt-6">
+                {nav.map((l, i) => (
+                  <motion.li
+                    key={l.href}
+                    initial={reduce ? false : { opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.6,
+                      delay: 0.08 + i * 0.06,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                  >
+                    <Link
+                      href={l.href}
+                      className="block py-3 t-h1 text-paper hover:text-navy-tint transition-colors"
+                    >
+                      {l.label}
+                    </Link>
+                  </motion.li>
+                ))}
+              </ul>
+              <div className="pt-6">
+                <MagneticButton href="/assessment" variant="paper" className="w-full">
+                  Take the free assessment
+                </MagneticButton>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

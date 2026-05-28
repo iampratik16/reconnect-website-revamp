@@ -1,242 +1,377 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import Section from "@/components/primitives/Section";
+import SectionHeader from "@/components/primitives/SectionHeader";
+import Reveal from "@/components/primitives/Reveal";
+import Eyebrow from "@/components/primitives/Eyebrow";
+import SplitReveal from "@/components/primitives/SplitReveal";
+import MagneticButton from "@/components/primitives/MagneticButton";
+import Stagger, { StaggerItem } from "@/components/primitives/Stagger";
+import Accordion from "@/components/primitives/Accordion";
+import CTASection from "@/components/primitives/CTASection";
+import { LineArtHand } from "@/components/primitives/LineArt";
+import { plans, ALL_PLAN_FEATURES, cgmAddOn } from "@/lib/content/pricing";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Pricing",
   description:
-    "Transparent pricing for Reconnect's doctor-led strength training programs. Three plans designed for maintenance, chronic conditions, and post-surgery recovery.",
+    "Three 6-month packages — Standard ₹20,000, Basic ₹30,000, Premium ₹40,000. All include medical assessment, personalised plan, and progress tracking.",
 };
 
-const plans = [
+const pricingFaqs = [
   {
-    name: "Essential",
-    price: "2,499",
-    period: "/mo",
-    description: "For maintenance and prevention",
-    audience:
-      "Ideal if you have mild joint concerns, want to prevent bone loss, or simply want a doctor-reviewed strength program.",
-    features: [
-      "Medical assessment and condition report",
-      "Personalized strength training program",
-      "Anti-inflammatory nutrition chart",
-      "App access with video demonstrations",
-      "Email support",
-    ],
-    highlighted: false,
-    cta: "Get started",
-    ctaStyle: "btn-primary",
+    q: "Is this billed monthly or as a one-time payment?",
+    a: "Each package is a 6-month program priced as a single fee. Internally we structure it as a 6-month commitment because that's the time horizon where bones, joints and muscle actually change.",
   },
   {
-    name: "Care",
-    price: "4,999",
-    period: "/mo",
-    badge: "Recommended",
-    description: "For active chronic conditions",
-    audience:
-      "Built for people managing arthritis, disc issues, chronic back pain, or early osteoporosis who need ongoing clinical oversight.",
-    features: [
-      "Everything in Essential, plus:",
-      "Monthly rheumatologist check-in with Dr. Shruthi",
-      "Video form feedback and movement corrections",
-      "One-on-one coaching sessions",
-      "Personalized Indian meal plans",
-      "Priority chat support",
-    ],
-    highlighted: true,
-    cta: "Start with Care",
-    ctaStyle: "btn-amber",
+    q: "Can I pause or cancel?",
+    a: "Yes. Plans are flexible — pause when life happens, resume when you're ready. No lock-ins. Cancellation policy details are shared during onboarding.",
   },
   {
-    name: "Elite Recovery",
-    price: "8,999",
-    period: "/mo",
-    description: "For post-surgery or acute conditions",
-    audience:
-      "Designed for people recovering from joint surgery, managing severe flare-ups, or dealing with advanced bone and joint conditions.",
-    features: [
-      "Everything in Care, plus:",
-      "Bi-weekly consultations with Dr. Shruthi",
-      "Custom rehabilitation protocol",
-      "Flare-up management and protocol adjustments",
-      "Priority WhatsApp support",
-      "Coordination with your treating doctor",
-    ],
-    highlighted: false,
-    cta: "Get Elite Recovery",
-    ctaStyle: "btn-primary",
+    q: "What's included in the medical assessment?",
+    a: "Detailed intake, history, medications, imaging review (if you have it), mobility screen, pain mapping — and a recommendation for which track and starting point fits you.",
+  },
+  {
+    q: "Do I need a doctor's referral?",
+    a: "No referral needed. If you're under treatment, we'll loop your doctor in where it helps. Reconnect works alongside your medication and treating doctor — never instead of them.",
+  },
+  {
+    q: "Why does this cost more than a generic fitness app?",
+    a: "Because it isn't a generic fitness app. The plan is built by a rheumatologist, around your exact condition, with medical coordination and structured progression. You're paying for a designed program — not a template.",
+  },
+  {
+    q: "What about the CGM add-on?",
+    a: `It's separate: ₹${cgmAddOn.price.toLocaleString("en-IN")} for ${cgmAddOn.period}. A different program for borderline diabetes — read more on the CGM page.`,
   },
 ];
 
-export default function PricingPage() {
+export default function Page() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-primary text-on-primary py-16 md:py-24">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16 text-center">
-          <p className="text-label-md text-on-primary/70 uppercase tracking-widest mb-4">
-            Pricing
-          </p>
-          <h1 className="text-display-lg-mobile md:text-display-lg text-on-primary max-w-2xl mx-auto mb-6">
-            Investment in your mobility
+      {/* HERO */}
+      <section className="relative bg-bone overflow-hidden">
+        <LineArtHand
+          aria-hidden
+          className="absolute -right-20 top-1/2 -translate-y-1/2 w-[460px] text-sage opacity-[0.06]"
+        />
+        <div className="paper-grain absolute inset-0 z-[1] pointer-events-none" aria-hidden />
+        <div className="container-x relative z-10 pt-28 md:pt-40 pb-16 md:pb-20">
+          <Reveal>
+            <Eyebrow number="00">Pricing</Eyebrow>
+          </Reveal>
+          <h1 className="t-h1 mt-8 max-w-[22ch] text-ink">
+            <span className="block">
+              <SplitReveal delay={0.1}>Health packages.</SplitReveal>
+            </span>
+            <span className="block">
+              <em className="italic-serif text-clay">
+                <SplitReveal delay={0.28}>Built for outcomes.</SplitReveal>
+              </em>
+            </span>
           </h1>
-          <p className="text-body-lg text-on-primary/80 max-w-2xl mx-auto">
-            No hidden fees. No long-term contracts. Every plan includes a medical
-            assessment and a program built around your specific condition.
-          </p>
+          <Reveal delay={0.6}>
+            <p className="t-lead mt-7 max-w-[640px]">
+              All three packages are 6-month programs. Every package starts
+              with a medical assessment and a personalised plan. You step up
+              tiers only as your needs do.
+            </p>
+          </Reveal>
         </div>
       </section>
 
-      {/* Pricing Cards */}
-      <section className="py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-            {plans.map((plan) => (
-              <div
-                key={plan.name}
-                className={`rounded-xl p-6 flex flex-col relative ${
-                  plan.highlighted
-                    ? "bg-surface-container-lowest hairline-border ring-2 ring-accent-amber soft-shadow scale-[1.02] md:scale-105"
-                    : "bg-surface-container-lowest hairline-border soft-shadow"
-                }`}
-              >
-                {plan.badge && (
-                  <span className="absolute -top-3 left-6 bg-accent-amber text-on-surface text-caption font-semibold px-3 py-1 rounded-full">
-                    {plan.badge}
-                  </span>
-                )}
-
-                <div className="mb-6">
-                  <h3 className="text-title-lg text-on-surface mb-1">
-                    {plan.name}
-                  </h3>
-                  <p className="text-body-md text-on-surface-variant mb-4">
-                    {plan.description}
-                  </p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-headline-md text-on-surface">
-                      ₹{plan.price}
+      {/* THREE TIERS */}
+      <Section tone="bone" density="lg" className="border-t border-line">
+        <div className="container-x">
+          <Stagger className="grid md:grid-cols-3 gap-5 md:gap-6">
+            {plans.map((p, i) => (
+              <StaggerItem key={p.slug}>
+                <div
+                  className={
+                    "relative card flex flex-col h-full p-7 md:p-9 " +
+                    (p.popular
+                      ? "bg-navy-deep text-bone border-navy-deep"
+                      : "")
+                  }
+                >
+                  {p.popular && (
+                    <span className="absolute -top-3 left-8 t-eyebrow bg-clay text-bone px-3 py-1.5 rounded-full">
+                      Most popular
                     </span>
-                    <span className="text-body-md text-on-surface-variant">
-                      {plan.period}
+                  )}
+                  <div className="flex items-baseline justify-between">
+                    <h2
+                      className={
+                        p.popular ? "t-h2 text-bone" : "t-h2 text-ink"
+                      }
+                    >
+                      {p.name}
+                    </h2>
+                    <span className="section-num text-xs">0{i + 1}</span>
+                  </div>
+                  <p
+                    className={
+                      p.popular ? "t-body text-bone/70 mt-3" : "t-body mt-3"
+                    }
+                  >
+                    {p.blurb}
+                  </p>
+                  <div className="mt-8 flex items-baseline gap-2">
+                    <span
+                      className={
+                        "t-number text-[3rem] md:text-[3.5rem] leading-none " +
+                        (p.popular ? "text-bone" : "text-ink")
+                      }
+                    >
+                      ₹{p.price.toLocaleString("en-IN")}
+                    </span>
+                    <span
+                      className={
+                        p.popular ? "text-bone/60 text-sm" : "text-ink-soft text-sm"
+                      }
+                    >
+                      {p.period}
                     </span>
                   </div>
+                  <ul className="mt-8 flex flex-col gap-3">
+                    {p.features.map((f) => (
+                      <li
+                        key={f.label}
+                        className="flex items-start gap-3 text-[0.9375rem]"
+                      >
+                        <span
+                          aria-hidden
+                          className={
+                            "mt-1 w-5 h-5 shrink-0 rounded-full grid place-items-center " +
+                            (!f.included
+                              ? p.popular
+                                ? "bg-bone/10 text-bone/30"
+                                : "bg-line text-ink-soft/40"
+                              : p.popular
+                                ? "bg-clay text-bone"
+                                : "bg-sage-tint text-sage-deep")
+                          }
+                        >
+                          {f.included ? (
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                              <path
+                                d="M1.5 5L4 7.5L8.5 2.5"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          ) : (
+                            <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                              <path
+                                d="M1 1L7 7M7 1L1 7"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                          )}
+                        </span>
+                        <span
+                          className={
+                            !f.included
+                              ? p.popular
+                                ? "text-bone/40 line-through"
+                                : "text-ink-soft/50 line-through"
+                              : p.popular
+                                ? "text-bone/90"
+                                : "text-ink"
+                          }
+                        >
+                          {f.label}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-auto pt-10">
+                    <MagneticButton
+                      href="/assessment"
+                      variant={p.popular ? "clay" : "sage"}
+                      className="w-full"
+                    >
+                      Start with assessment
+                    </MagneticButton>
+                  </div>
                 </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </Section>
 
-                <p className="text-body-md text-on-surface-variant mb-6">
-                  {plan.audience}
-                </p>
-
-                <ul className="flex flex-col gap-3 mb-8 flex-grow">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3">
-                      <span className="material-symbols-outlined text-success text-xl mt-0.5 shrink-0">
-                        check_circle
-                      </span>
-                      <span className="text-body-md text-on-surface">
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
+      {/* CGM ADD-ON */}
+      <Section tone="bone-deep" density="sm">
+        <div className="container-x">
+          <Reveal>
+            <div className="border border-line bg-calcium rounded-[20px] p-8 md:p-10 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+              <div>
+                <span className="t-eyebrow text-sage">Add-on program</span>
+                <h3 className="t-h3 mt-3 text-ink">{cgmAddOn.name}</h3>
+                <p className="t-body mt-3 max-w-[60ch]">{cgmAddOn.blurb}</p>
+              </div>
+              <div className="flex flex-col items-start md:items-end gap-2">
+                <span className="t-number text-3xl text-ink">
+                  ₹{cgmAddOn.price.toLocaleString("en-IN")}
+                </span>
+                <span className="t-caption text-ink-soft">{cgmAddOn.period}</span>
                 <Link
-                  href="/assessment"
-                  className={`${plan.ctaStyle} text-center w-full mt-auto`}
+                  href={cgmAddOn.href}
+                  className="mt-2 t-eyebrow text-clay hover:opacity-80 transition-opacity"
                 >
-                  {plan.cta}
+                  Learn more →
                 </Link>
               </div>
+            </div>
+          </Reveal>
+        </div>
+      </Section>
+
+      {/* VALUE-JUSTIFICATION */}
+      <Section tone="bone" density="lg">
+        <div className="container-x">
+          <SectionHeader
+            number="02"
+            eyebrow="Why this costs more than a fitness app"
+            title="You're not paying for content. You're paying for a designed program."
+            lead="Pricing resistance is real — we've thought about this carefully. Here's where the money goes."
+          />
+
+          <Stagger className="mt-12 grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              {
+                t: "A rheumatologist's design",
+                c: "Every plan starts from a medical brain — not a fitness brain. That's the foundation everything else stands on.",
+              },
+              {
+                t: "Personalised to your body",
+                c: "Not a template adjusted by height/weight. A plan shaped by your condition, your imaging, your pain, your age.",
+              },
+              {
+                t: "Pain-first sequencing",
+                c: "We don't push through pain. We work around it, calm it, reduce it — then build. That sequencing is the skill.",
+              },
+              {
+                t: "Structured 12-week roadmap",
+                c: "Direction and motivation that no algorithm can provide. You always know what this week is for.",
+              },
+            ].map((v, i) => (
+              <StaggerItem key={v.t}>
+                <article className="card p-7 h-full">
+                  <p className="section-num text-xs">0{i + 1}</p>
+                  <h3 className="t-h3 mt-3 text-ink">{v.t}</h3>
+                  <p className="t-body mt-3">{v.c}</p>
+                </article>
+              </StaggerItem>
             ))}
+          </Stagger>
+        </div>
+      </Section>
+
+      {/* FEATURE COMPARISON TABLE */}
+      <Section tone="bone-deep" density="lg">
+        <div className="container-x">
+          <SectionHeader
+            number="03"
+            eyebrow="Compare"
+            title="Feature comparison."
+          />
+          <div className="mt-12 overflow-x-auto">
+            <table className="w-full min-w-[760px] border-collapse">
+              <thead>
+                <tr className="text-left t-eyebrow text-ink-soft border-b border-line">
+                  <th className="py-4 pr-6 font-medium w-[40%]">Feature</th>
+                  {plans.map((p) => (
+                    <th
+                      key={p.slug}
+                      className={
+                        "py-4 px-4 font-medium " +
+                        (p.popular ? "text-clay" : "")
+                      }
+                    >
+                      {p.name}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {ALL_PLAN_FEATURES.map((f) => (
+                  <tr key={f} className="border-b border-line">
+                    <th className="py-4 pr-6 text-left font-medium text-ink text-[0.9375rem]">
+                      {f}
+                    </th>
+                    {plans.map((p) => {
+                      const included = p.features.find(
+                        (x) => x.label === f,
+                      )?.included;
+                      return (
+                        <td
+                          key={p.slug}
+                          className="py-4 px-4 text-ink-soft text-[0.9375rem]"
+                        >
+                          {included ? (
+                            <span className="inline-flex items-center gap-2 text-sage-deep">
+                              <span className="inline-block w-2 h-2 rounded-full bg-sage-deep" />
+                              Included
+                            </span>
+                          ) : (
+                            <span className="text-ink-soft/50">—</span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+                <tr>
+                  <th className="py-4 pr-6 text-left font-medium text-ink text-[0.9375rem]">
+                    Price
+                  </th>
+                  {plans.map((p) => (
+                    <td
+                      key={p.slug}
+                      className={
+                        "py-4 px-4 t-number text-[1.25rem] " +
+                        (p.popular ? "text-clay" : "text-ink")
+                      }
+                    >
+                      ₹{p.price.toLocaleString("en-IN")}
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      </section>
+      </Section>
 
-      {/* Reassurance */}
-      <section className="bg-surface-container-low py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-10">
-              <h2 className="text-headline-md-mobile md:text-headline-md text-on-surface mb-4">
-                No pressure. No lock-in.
-              </h2>
-              <p className="text-body-lg text-on-surface-variant">
-                We want this to work for you — not trap you. Here are the things
-                people commonly ask before signing up.
-              </p>
-            </div>
-
-            {/* FAQ Item */}
-            <div className="bg-surface-container-lowest rounded-xl hairline-border soft-shadow p-6">
-              <div className="flex items-start gap-4">
-                <span className="material-symbols-outlined text-primary text-2xl mt-0.5 shrink-0">
-                  swap_horiz
-                </span>
-                <div>
-                  <h3 className="text-title-lg text-on-surface mb-2">
-                    Can I switch plans later?
-                  </h3>
-                  <p className="text-body-md text-on-surface-variant">
-                    Absolutely. You can upgrade or downgrade your plan at any time.
-                    If your condition improves and you no longer need monthly
-                    check-ins, you can move to the Essential plan. If things get
-                    more complex, you can step up to Care or Elite Recovery. We
-                    will help you decide what makes sense.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Additional reassurance points */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
-              {[
-                {
-                  icon: "shield",
-                  label: "Cancel anytime",
-                  detail: "No contracts or exit fees",
-                },
-                {
-                  icon: "verified",
-                  label: "Doctor-reviewed",
-                  detail: "Every program is clinically sound",
-                },
-                {
-                  icon: "lock",
-                  label: "Secure payments",
-                  detail: "Encrypted and private",
-                },
-              ].map((item) => (
-                <div key={item.label} className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-primary">
-                    {item.icon}
-                  </span>
-                  <div>
-                    <p className="text-label-md text-on-surface">{item.label}</p>
-                    <p className="text-caption text-on-surface-variant">
-                      {item.detail}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+      {/* FAQ */}
+      <Section tone="bone" density="lg">
+        <div className="container-x">
+          <SectionHeader
+            number="04"
+            eyebrow="FAQ"
+            title="Pricing — answered honestly."
+          />
+          <div className="mt-12 max-w-[820px]">
+            <Accordion items={pricingFaqs} />
           </div>
         </div>
-      </section>
+      </Section>
 
-      {/* CTA */}
-      <section className="py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16 text-center">
-          <h2 className="text-headline-md-mobile md:text-headline-md text-on-surface mb-4">
-            Not sure which plan is right?
-          </h2>
-          <p className="text-body-lg text-on-surface-variant max-w-xl mx-auto mb-8">
-            Take the free assessment and we will recommend the plan that fits your
-            condition, goals, and budget.
-          </p>
-          <Link href="/assessment" className="btn-amber">
-            Take the free assessment
-          </Link>
-        </div>
-      </section>
+      <CTASection
+        eyebrow="Decide with data"
+        headline={
+          <>
+            Take the assessment.{" "}
+            <em className="italic-serif text-clay">Then choose.</em>
+          </>
+        }
+        sub="Once we know your starting point, the right package becomes obvious."
+        tone="bone-deep"
+      />
     </>
   );
 }

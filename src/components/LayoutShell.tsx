@@ -1,22 +1,18 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import Header from "./Header";
 import Footer from "./Footer";
+import SmoothScroll from "./primitives/SmoothScroll";
+import PageTransition from "./primitives/PageTransition";
 
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const isAssessment = pathname.startsWith("/assessment");
-
-  if (isAssessment) {
-    return <>{children}</>;
-  }
-
   return (
-    <>
+    <SmoothScroll>
       <Header />
-      <main className="flex-grow">{children}</main>
+      <main id="main" className="pt-[72px] md:pt-[80px]">
+        <PageTransition>{children}</PageTransition>
+      </main>
       <Footer />
-    </>
+    </SmoothScroll>
   );
 }
