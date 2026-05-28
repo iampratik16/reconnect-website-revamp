@@ -83,7 +83,7 @@ export default function Footer() {
         <div className="md:col-span-4">
           <Link href="/" className="inline-flex items-center gap-2">
             <Image
-              src="/logo.png"
+              src="/logo-black.png"
               alt=""
               width={44}
               height={44}

@@ -66,16 +66,14 @@ export default function Header() {
           className="flex items-center gap-2"
         >
           <Image
-            src="/logo.png"
+            src={overDarkHero ? "/logo.png" : "/logo-black.png"}
             alt=""
             width={40}
             height={40}
             priority
             className={
               "h-8 md:h-9 w-auto transition-[filter] duration-300 " +
-              (overDarkHero
-                ? "[filter:brightness(0)_invert(1)]"
-                : "[filter:none]")
+              (overDarkHero ? "[filter:brightness(0)_invert(1)]" : "[filter:none]")
             }
           />
           <span
