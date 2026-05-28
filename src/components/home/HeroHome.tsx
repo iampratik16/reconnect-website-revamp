@@ -67,9 +67,10 @@ export default function HeroHome() {
             onLoadedData={() => setVideoReady(true)}
             onCanPlay={() => setVideoReady(true)}
             className={
-              "absolute inset-0 w-full h-full object-cover transition-opacity duration-500 " +
+              "absolute inset-0 w-full h-full object-cover object-[60%_30%] transition-opacity duration-500 " +
               (videoReady ? "opacity-100" : "opacity-0")
             }
+            style={{ width: "100%", height: "100%" }}
           />
         ) : (
           <Image

@@ -161,35 +161,105 @@ export default function Header() {
             initial={reduce ? { opacity: 0 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="md:hidden fixed inset-0 z-40 bg-ink text-paper"
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="md:hidden fixed inset-0 z-[60] bg-ink text-paper"
           >
-            <div className="container-x pt-28 pb-12 h-full flex flex-col">
-              <ul className="flex-1 flex flex-col gap-1 mt-6">
+            {/* Top bar inside overlay — explicit Close button */}
+            <div className="container-x flex items-center justify-between h-[72px] border-b border-paper/10">
+              <Link
+                href="/"
+                onClick={() => setOpen(false)}
+                aria-label="Reconnect — home"
+                className="flex items-baseline gap-1"
+              >
+                <span className="font-[family-name:var(--font-display)] text-[1.5rem] tracking-[-0.04em] font-bold text-paper">
+                  reconnect
+                </span>
+                <span aria-hidden className="text-lg font-bold text-paper/70">
+                  .
+                </span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Close menu"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-paper/25 text-paper hover:bg-paper/10 transition-colors"
+              >
+                <span className="text-[0.8125rem] tracking-[0.12em] uppercase">
+                  Close
+                </span>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M2 2L12 12M12 2L2 12"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div className="container-x pt-8 pb-12 h-[calc(100%-72px)] flex flex-col">
+              <ul className="flex-1 flex flex-col gap-1 mt-2">
                 {nav.map((l, i) => (
                   <motion.li
                     key={l.href}
                     initial={reduce ? false : { opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
-                      duration: 0.6,
-                      delay: 0.08 + i * 0.06,
+                      duration: 0.55,
+                      delay: 0.06 + i * 0.05,
                       ease: [0.16, 1, 0.3, 1],
                     }}
                   >
                     <Link
                       href={l.href}
-                      className="block py-3 t-h1 text-paper hover:text-navy-tint transition-colors"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center justify-between py-4 border-b border-paper/10 text-paper hover:text-navy-tint transition-colors"
                     >
-                      {l.label}
+                      <span
+                        className="font-[family-name:var(--font-display)] font-bold tracking-[-0.025em]"
+                        style={{ fontSize: "clamp(1.875rem, 9vw, 2.5rem)" }}
+                      >
+                        {l.label}
+                      </span>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        aria-hidden
+                      >
+                        <path
+                          d="M3.5 10.5L10.5 3.5M10.5 3.5H4.55M10.5 3.5V9.45"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
                     </Link>
                   </motion.li>
                 ))}
               </ul>
               <div className="pt-6">
-                <MagneticButton href="/assessment" variant="paper" className="w-full">
+                <MagneticButton
+                  href="/assessment"
+                  variant="paper"
+                  className="w-full justify-between"
+                >
                   Take the free assessment
                 </MagneticButton>
+              </div>
+              <div className="mt-6 flex items-center justify-between text-[0.8125rem] text-paper/50">
+                <span>Designed by Dr. Shruthi Desai</span>
+                <span>Tap anywhere to close</span>
               </div>
             </div>
           </motion.div>

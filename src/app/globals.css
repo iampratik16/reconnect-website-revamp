@@ -181,7 +181,10 @@ html.lenis body { height: auto; }
 
 /* Prevent global horizontal overflow caused by full-bleed background-art */
 html, body { overflow-x: hidden; }
-img, video, svg { max-width: 100%; height: auto; }
+img, svg { max-width: 100%; height: auto; }
+/* Videos: cap width to parent but never auto-size height — utilities like
+   h-full / object-cover are what determine the fill behaviour. */
+video { max-width: 100%; }
 
 /* Minimum tap target for touch a11y */
 @media (pointer: coarse) {
