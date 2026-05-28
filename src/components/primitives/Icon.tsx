@@ -21,9 +21,8 @@ export default function Icon({
       aria-hidden
       className={cn("msi select-none", className)}
       style={{
-        fontSize: size,
-        width: size,
-        height: size,
+        fontSize: `${size}px`,
+        lineHeight: 1,
         fontVariationSettings: `"FILL" ${filled ? 1 : 0}, "wght" ${weight}, "GRAD" 0, "opsz" ${size}`,
       }}
     >

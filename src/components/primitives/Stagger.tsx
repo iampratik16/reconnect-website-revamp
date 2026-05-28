@@ -47,7 +47,7 @@ export const StaggerItem = ({
   y?: number;
 }) => (
   <motion.div
-    className={className}
+    className={cn("h-full", className)}
     variants={{
       hidden: { opacity: 0, y, filter: "blur(6px)" },
       show: {

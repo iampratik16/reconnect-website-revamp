@@ -28,25 +28,32 @@ export default function HeroHome() {
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, reduce ? 1 : 0.35]);
 
   const showVideo = !reduce && !isMobile;
+  const [videoReady, setVideoReady] = useState(false);
 
   return (
     <section
       ref={ref}
       className="relative min-h-[100svh] bg-ink overflow-hidden"
     >
-      {/* Hero media — looping muted video on desktop, poster on mobile/reduced-motion */}
-      <motion.div style={{ y, opacity }} className="absolute inset-0 z-0" aria-hidden>
+      {/* Hero media — looping muted video on desktop, poster on mobile/reduced-motion.
+          Section bg is bg-ink so the moment before video is decoded shows pure dark,
+          not a placeholder image flash. */}
+      <motion.div style={{ y, opacity }} className="absolute inset-0 z-0 bg-ink" aria-hidden>
         {showVideo ? (
           <video
             ref={videoRef}
             src="/hero.mp4"
-            poster="/woman-dumbbell.jpg"
             autoPlay
             muted
             loop
             playsInline
             preload="auto"
-            className="absolute inset-0 w-full h-full object-cover"
+            onLoadedData={() => setVideoReady(true)}
+            onCanPlay={() => setVideoReady(true)}
+            className={
+              "absolute inset-0 w-full h-full object-cover transition-opacity duration-500 " +
+              (videoReady ? "opacity-100" : "opacity-0")
+            }
           />
         ) : (
           <Image

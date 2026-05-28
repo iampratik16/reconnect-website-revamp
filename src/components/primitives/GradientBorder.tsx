@@ -19,7 +19,7 @@ export default function GradientBorder({
 }: Props) {
   const outerClass = cn(
     animated ? "gradient-border" : "gradient-border-static",
-    "block group",
+    "block group h-full",
     className,
   );
   const inner = (
