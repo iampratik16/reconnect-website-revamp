@@ -59,20 +59,20 @@ export default function Header() {
           : "bg-transparent")
       }
     >
-      <div className="container-x flex items-center justify-between h-[72px] md:h-[88px]">
+      <div className="container-x flex items-center justify-between h-[72px] md:h-[80px]">
         <Link
           href="/"
           aria-label="Reconnect — home"
-          className="flex flex-col items-center gap-0.5 leading-none"
+          className="flex items-center gap-2"
         >
           <Image
             src="/logo.png"
             alt=""
-            width={36}
-            height={36}
+            width={40}
+            height={40}
             priority
             className={
-              "h-7 md:h-8 w-auto transition-[filter] duration-300 " +
+              "h-8 md:h-9 w-auto transition-[filter] duration-300 " +
               (overDarkHero
                 ? "[filter:brightness(0)_invert(1)]"
                 : "[filter:none]")
@@ -80,7 +80,7 @@ export default function Header() {
           />
           <span
             className={
-              "font-[family-name:var(--font-display)] text-[1.0625rem] md:text-[1.125rem] tracking-[-0.04em] font-bold transition-colors leading-none " +
+              "font-[family-name:var(--font-display)] text-[1.5rem] md:text-[1.625rem] tracking-[-0.04em] font-bold transition-colors " +
               (open ? "text-paper" : textCls)
             }
           >
@@ -183,16 +183,16 @@ export default function Header() {
                 href="/"
                 onClick={() => setOpen(false)}
                 aria-label="Reconnect — home"
-                className="flex flex-col items-center gap-0.5 leading-none"
+                className="flex items-center gap-2"
               >
                 <Image
                   src="/logo.png"
                   alt=""
                   width={36}
                   height={36}
-                  className="h-7 w-auto [filter:brightness(0)_invert(1)]"
+                  className="h-8 w-auto [filter:brightness(0)_invert(1)]"
                 />
-                <span className="font-[family-name:var(--font-display)] text-[1rem] tracking-[-0.04em] font-bold text-paper leading-none">
+                <span className="font-[family-name:var(--font-display)] text-[1.5rem] tracking-[-0.04em] font-bold text-paper">
                   reconnect
                 </span>
               </Link>

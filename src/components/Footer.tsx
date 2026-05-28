@@ -81,15 +81,15 @@ export default function Footer() {
       <div className="relative container-x py-16 grid md:grid-cols-12 gap-10 md:gap-8">
         {/* Brand + newsletter */}
         <div className="md:col-span-4">
-          <Link href="/" className="inline-flex flex-col items-center gap-1 leading-none">
+          <Link href="/" className="inline-flex items-center gap-2">
             <Image
               src="/logo.png"
               alt=""
-              width={56}
-              height={56}
-              className="h-12 w-auto"
+              width={44}
+              height={44}
+              className="h-9 w-auto"
             />
-            <span className="font-[family-name:var(--font-display)] text-2xl tracking-[-0.04em] font-bold leading-none">
+            <span className="font-[family-name:var(--font-display)] text-3xl tracking-[-0.04em] font-bold">
               reconnect
             </span>
           </Link>
